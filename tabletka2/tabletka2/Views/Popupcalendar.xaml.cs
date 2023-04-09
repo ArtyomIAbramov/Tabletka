@@ -125,9 +125,13 @@ namespace tabletka2.Views
             }
             else
             {
+                note.ID = 0;
                 note.dateTakeTime = helperFornewNote;
-                 Calendari.notesDBForSearch.AddnewNote(note);
-                    for (int i = 0; i < int.Parse(Days_of_Take.Text); ++i)
+                Calendari.notesDBForSearch.AddnewNote(note);
+                Calendari.notesDB.AddnewNote(note);
+                ParseToTimeSpanList(note, note.dateTakeTime);
+                note.dateTakeTime = note.dateTakeTime.AddDays(1);
+                for (int i = 0; i < int.Parse(Days_of_Take.Text)-1; ++i)
                     {
                     note.ID = 0;
                     Calendari.notesDB.AddnewNote(note);
@@ -135,7 +139,7 @@ namespace tabletka2.Views
                     note.dateTakeTime = note.dateTakeTime.AddDays(1);
                     }
                 collection.ItemsSource = await Calendari.notesDB.GetNotes(helperFornewNote);
-                 Navigation.PopPopupAsync();
+                await Navigation.PopPopupAsync();
             }
         }
         private void ParseToTimeSpanList(Note note, DateTime dt)
@@ -148,9 +152,10 @@ namespace tabletka2.Views
                 {
                     if (TimeSpan.TryParse(note1[i], out timerspan))
                     {
+                        dt = dt.Add(timerspan);
                         if (DateTime.Now < dt)
                         {
-                            notificationManager.SendNotification(note.Name_of_pill, note.Measure, dt.Add(timerspan));
+                            notificationManager.SendNotification(note.Name_of_pill, note.Measure, dt);
                         }
                     }
                 }

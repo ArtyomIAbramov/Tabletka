@@ -458,7 +458,7 @@
 
 	/* 50: tabletka2.dll */
 	/* uncompressed_file_size */
-	.word	710144
+	.word	710656
 	/* loaded */
 	.byte	0
 	/* data */
